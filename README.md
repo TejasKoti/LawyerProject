@@ -115,10 +115,10 @@ Used for recommendation testing.
 ## 📸 Screenshots
 
 - **Login Page**  
-  ![Login](templates/login.png)  
+  ![Login](WebsiteFinal/templates/login.png)   
 
 - **Dashboard (Chatbot + Lawyer Recs)**  
-  ![Dashboard](templates/index.png)  
+  ![Dashboard](WebsiteFinal/templates/index.png)   
 
 ---
 
