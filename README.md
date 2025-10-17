@@ -1,5 +1,4 @@
-
-#⚖️ LawyerAI — Chatbot & Recommendation
+# ⚖️ LawyerAI — Chatbot & Recommendation
 
 An AI-powered web application that combines a **fine-tuned Llama-2 legal chatbot** with a **lawyer recommendation engine**.  
 The system allows users to:  
@@ -158,16 +157,16 @@ Open http://127.0.0.1:5000 — you’ll see the **landing page** → Login and E
 ## 🖼 Screenshots
 
 - **Landing / Main**  
-  `![Main](PreviewImages/A-MainPage.gif)`
+  ![Main](WebsiteFinal/New/PreviewImages/A-MainPage.gif)
 
 - **Login**  
-  `![Login](PreviewImages/B-Login.png)`
+  ![Login](WebsiteFinal/New/PreviewImages/B-Login.png)
 
 - **Chatbot**  
-  `![Chat](PreviewImages/C-ChatBot.png)`
+  ![Chat](WebsiteFinal/New/PreviewImages/C-ChatBot.png)
 
 - **Recommendations**  
-  `![Recommendations](PreviewImages/D-Recommendation.png)`
+  ![Recommendations](WebsiteFinal/New/PreviewImages/D-Recommendation.png)
 
 ---
 
