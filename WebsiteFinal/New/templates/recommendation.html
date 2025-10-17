@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LawyerAI • Recommendations</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/Logo.png') }}">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/glass.css') }}">
+</head>
+
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="{{ url_for('static', filename='assets/Logo.png') }}" alt="logo"
+             onerror="this.style.background='#d7e6ff';this.src='';">
+        <div class="title">LawyerAI</div>
+      </div>
+
+      <nav class="nav">
+        <a class="item" id="btnNewChat" href="{{ url_for('chat') }}">
+          <i class="ri-chat-3-line"></i> New chat
+        </a>
+        <a class="item active" id="btnRecommendation" href="{{ url_for('recommendation') }}">
+          <i class="ri-scales-3-line"></i> Recommendation
+        </a>
+      </nav>
+
+      <div class="profile-wrap">
+        <button class="profile" id="profileCard" title="Account options">
+          <div class="avatar"><i class="ri-user-line"></i></div>
+          <div class="meta">
+            <div class="name" id="userName">{{ user_name|default('User') }}</div>
+            <div class="plan">Local plan</div>
+          </div>
+          <i class="ri-more-2-fill more-icon" id="userMenuBtn"></i>
+        </button>
+
+        <div class="user-menu" id="userMenu">
+          <div class="menu-item" id="logoutBtn">
+            <i class="ri-logout-box-r-line"></i> Logout
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <section class="surface" id="recommendSurface">
+
+        <!-- Header -->
+        <div class="header">
+          <h2 style="margin:0;font-size:18px;">Find the Right Lawyer</h2>
+        </div>
+
+        <!-- Scrollable Results -->
+        <div class="content" id="resultsScroll">
+          <div id="resultsContainer" class="results-grid">
+            <p class="placeholder">🔍 Enter a query below to get personalized lawyer recommendations.</p>
+          </div>
+        </div>
+
+        <!-- Input -->
+        <div class="composer-wrap">
+          <div class="composer">
+            <input id="recommendInput" type="text" placeholder="Describe your lawyer requirements…" autocomplete="off"/>
+            <button class="send" id="sendRecommend" title="Search"><i class="ri-arrow-up-line"></i></button>
+          </div>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Working Script -->
+  <script>
+  $(document).ready(function () {
+    console.log("✅ Recommendation page loaded");
+
+    // Trigger search
+    $("#sendRecommend").on("click", sendQuery);
+    $("#recommendInput").on("keypress", function (e) {
+      if (e.which === 13) {
+        e.preventDefault();
+        sendQuery();
+      }
+    });
+
+    function sendQuery() {
+      const query = $("#recommendInput").val().trim();
+      console.log("📤 Sending /recommend query:", query);
+
+      if (!query) {
+        $("#resultsContainer").html('<p class="placeholder">⚠️ Please enter a search term.</p>');
+        return;
+      }
+
+      $("#resultsContainer").html('<p class="placeholder">⏳ Searching for lawyers...</p>');
+
+      $.ajax({
+        url: "/recommend",
+        type: "POST",
+        data: { query: query },
+        success: function (data) {
+          console.log("✅ Received:", data);
+          const box = $("#resultsContainer");
+          box.empty();
+
+          if (data.error) {
+            box.html('<p class="placeholder">❌ ' + data.error + '</p>');
+            return;
+          }
+
+          if (!data.lawyers || !Array.isArray(data.lawyers) || data.lawyers.length === 0) {
+            box.html('<p class="placeholder">⚠️ ' + (data.message || "No lawyers found.") + "</p>");
+            return;
+          }
+
+          data.lawyers.forEach(function (lawyer) {
+            const card = `
+              <div class="lawyer-card glass-card">
+                <div class="lawyer-header">
+                  <i class="ri-user-3-line"></i>
+                  <h3>${lawyer.name}</h3>
+                </div>
+                <p><b>Domain:</b> ${lawyer.domain}</p>
+                <p><b>Experience:</b> ${lawyer.experience}</p>
+                <p><b>Charges:</b> ${lawyer.price}</p>
+                <p><b>Satisfaction:</b> ${lawyer.satisfaction}</p>
+              </div>`;
+            box.append(card);
+          });
+        },
+        error: function (xhr, status, err) {
+          console.error("❌ /recommend failed:", status, err);
+          $("#resultsContainer").html('<p class="placeholder">❌ Could not reach backend. Check Flask logs.</p>');
+        },
+      });
+    }
+  });
+  </script>
+
+  <!-- Inline CSS -->
+  <style>
+    #resultsScroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .results-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .placeholder {
+      text-align: center;
+      color: rgba(0,0,0,0.5);
+      font-size: 14px;
+      margin-top: 60px;
+    }
+
+    .glass-card {
+      background: rgba(255,255,255,0.3);
+      border: 1px solid rgba(255,255,255,0.6);
+      border-radius: 16px;
+      padding: 18px 20px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      color: #1d2333;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .glass-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+    }
+
+    .lawyer-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .lawyer-header i {
+      font-size: 22px;
+      color: #5f7dff;
+    }
+
+    .lawyer-card h3 {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 600;
+    }
+  </style>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LawyerAI • Chat</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/Logo.png') }}">
+
+  <!-- Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+
+  <!-- jQuery (deferred) -->
+  <script defer src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Screenshot lib (deferred) -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+          integrity="sha512-BNa5Hh0a1zqf7qAEkB7tV2eBUMp3b4V3i2z0sii9R5a/qpYb2x2GqgJ0jz0leSuy6Qm0n7H8C2KqZbKkqj7i1g=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/glass.css') }}">
+
+  <style>
+    /* 🔴 Delete All Chats button style */
+    #deleteAllBtn {
+      color: #ff4d4f;
+      font-weight: 600;
+    }
+
+    #deleteAllBtn:hover {
+      background: #ff4d4f;
+      color: white;
+    }
+
+    /* 🧊 Modal adjustments (reuses glass modal style) */
+    #deleteModal .modal {
+      max-width: 420px;
+      text-align: center;
+    }
+
+    #deleteModal h3 {
+      color: #ff4d4f;
+      margin-bottom: 12px;
+    }
+
+    #deleteModal p {
+      font-size: 15px;
+      opacity: 0.85;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="{{ url_for('static', filename='assets/Logo.png') }}" alt="logo"
+             onerror="this.style.background='#d7e6ff';this.src='';">
+        <div class="title">LawyerAI</div>
+      </div>
+
+      <!-- Primary actions -->
+      <nav class="nav">
+        <a class="item active" id="btnNewChat"><i class="ri-chat-3-line"></i> New chat</a>
+        <a class="item" id="btnRecommendation" href="{{ url_for('recommendation') }}"><i class="ri-scales-3-line"></i> Recommendation</a>
+      </nav>
+
+      <!-- Library -->
+      <nav class="nav">
+        <h6>Library</h6>
+        <div class="library-list" id="libraryList" aria-live="polite"></div>
+      </nav>
+
+      <!-- Folders heading with inline plus -->
+      <nav class="nav">
+        <h6>Folders 
+          <span class="circle" id="btnCreateFolder" title="Create folder" role="button" tabindex="0">
+            <i class="ri-add-line"></i>
+          </span>
+        </h6>
+        <div class="folders" id="foldersList" aria-live="polite"></div>
+      </nav>
+
+      <!-- Profile (user info + dropdown) -->
+      <div class="profile-wrap">
+        <button class="profile" id="profileCard" title="Account options">
+          <div class="avatar">
+            <i class="ri-user-line"></i>
+          </div>
+          <div class="meta">
+            <div class="name" id="userName">{{ user_name|default('User') }}</div>
+            <div class="plan">Local plan</div>
+          </div>
+          <i class="ri-more-2-fill more-icon" id="userMenuBtn"></i>
+        </button>
+
+        <!-- Popup menu -->
+        <div class="user-menu" id="userMenu">
+          <div class="menu-item" id="deleteAllBtn">
+            <i class="ri-delete-bin-6-line"></i> Delete All Chats
+          </div>
+          <div class="menu-item" id="logoutBtn">
+            <i class="ri-logout-box-r-line"></i> Logout
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <section class="surface" id="chatSurface">
+        <!-- Header with search + actions -->
+        <div class="header">
+          <div class="left-head">
+            <button class="icon-btn search-toggle" id="searchToggle" title="Search">
+              <i class="ri-search-line"></i>
+            </button>
+
+            <div class="search-expanded" id="searchBar">
+              <input id="searchInput" type="text" placeholder="Search in chat…" autocomplete="off" />
+
+              <div class="custom-select search-filter" id="searchFilterSelect" data-value="all">
+                <div class="selected">All ▾</div>
+                <ul class="options">
+                  <li data-value="all" class="active">All</li>
+                  <li data-value="user">User</li>
+                  <li data-value="bot">Bot</li>
+                </ul>
+              </div>
+
+              <span id="matchCounter" class="counter">0 / 0</span>
+              <button class="icon-btn" id="prevMatch" title="Previous"><i class="ri-arrow-up-s-line"></i></button>
+              <button class="icon-btn" id="nextMatch" title="Next"><i class="ri-arrow-down-s-line"></i></button>
+              <button class="icon-btn" id="clearSearch" title="Close"><i class="ri-close-line"></i></button>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; align-items:center; position:relative;">
+            <button class="icon-btn" id="btnShare" title="Download transcript"><i class="ri-share-line"></i></button>
+            <button class="icon-btn" id="btnMore" title="More" aria-haspopup="true" aria-expanded="false">
+              <i class="ri-more-2-line"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Chat content -->
+        <div class="content" id="contentScroll">
+          <div class="timeline" id="timeline" aria-live="polite"></div>
+        </div>
+
+        <!-- Composer -->
+        <div class="composer-wrap">
+          <div class="composer">
+            <button class="icon-btn" id="btnPlus" title="Add (placeholder)"><i class="ri-add-line"></i></button>
+            <input id="composerInput" type="text" placeholder="Ask anything…" autocomplete="off"/>
+            <button class="send" id="sendBtn" title="Send"><i class="ri-arrow-up-line"></i></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ✅ moved outside surface to avoid blur clipping -->
+      <div class="menu" id="moreMenu" role="menu">
+        <div class="mi" id="miAddToFolder" role="menuitem">
+          <i class="ri-folder-transfer-line"></i> Assign Folder
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Backdrop + Modals -->
+  <div class="backdrop" id="folderModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="folderModalTitle">
+      <h3 id="folderModalTitle">Assign this chat to folders</h3>
+      <div class="list" id="folderChecks"></div>
+      <div class="actions">
+        <button class="btn ghost" id="closeFolderModal">Cancel</button>
+        <button class="btn primary" id="saveFolderAssign">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="backdrop" id="renameModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="renameTitle">
+      <h3 id="renameTitle">Rename</h3>
+      <input type="text" id="renameInput" placeholder="New name" />
+      <div class="actions">
+        <button class="btn ghost" id="cancelRename">Cancel</button>
+        <button class="btn primary" id="confirmRename">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🧊 Delete confirmation modal -->
+  <div class="backdrop" id="deleteModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="deleteTitle">
+      <h3 id="deleteTitle">Delete All Chats</h3>
+      <p>Are you sure you want to permanently delete <strong>all chats and folders</strong>? This action cannot be undone.</p>
+      <div class="actions">
+        <button class="btn ghost" id="cancelDelete">Cancel</button>
+        <button class="btn primary" id="confirmDelete" style="background:#ff4d4f;">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script defer src="{{ url_for('static', filename='js/storage.js') }}"></script>
+  <script defer src="{{ url_for('static', filename='js/ui.js') }}"></script>
+  <script defer src="{{ url_for('static', filename='js/chat.js') }}"></script>
+  <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const deleteAllBtn = document.getElementById("deleteAllBtn");
+      const deleteModal = document.getElementById("deleteModal");
+      const cancelDelete = document.getElementById("cancelDelete");
+      const confirmDelete = document.getElementById("confirmDelete");
+
+      if (deleteAllBtn) {
+        deleteAllBtn.addEventListener("click", () => {
+          deleteModal.style.display = "flex";
+          deleteModal.setAttribute("aria-hidden", "false");
+        });
+      }
+
+      if (cancelDelete) {
+        cancelDelete.addEventListener("click", () => {
+          deleteModal.style.display = "none";
+          deleteModal.setAttribute("aria-hidden", "true");
+        });
+      }
+
+      if (confirmDelete) {
+        confirmDelete.addEventListener("click", () => {
+          try {
+            localStorage.clear();
+
+            const timeline = document.getElementById("timeline");
+            const libraryList = document.getElementById("libraryList");
+            const foldersList = document.getElementById("foldersList");
+
+            if (timeline) timeline.innerHTML = "";
+            if (libraryList) libraryList.innerHTML = "";
+            if (foldersList) foldersList.innerHTML = "";
+
+            deleteModal.style.display = "none";
+            alert("✅ All chats and folders deleted successfully.");
+            location.reload();
+          } catch (err) {
+            console.error("Error deleting data:", err);
+            alert("❌ Something went wrong while deleting chats.");
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

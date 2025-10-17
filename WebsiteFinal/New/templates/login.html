@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LawyerAI • Login</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/Logo.png') }}">
+
+
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+  <!-- ✅ Reuse the same background/theme as index -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/glass.css') }}">
+
+  <style>
+    :root{
+      --glass: rgba(255,255,255,.25);
+      --border: rgba(255,255,255,.35);
+      --shadow: 0 10px 40px rgba(17,23,41,.25);
+      --blur: 20px;
+      --primary: #5f7dff;
+      --ink: #0b1020;
+    }
+    *{ box-sizing: border-box }
+
+    /* center the card; background comes from glass.css */
+    body{
+      height: 100vh;
+      display:flex; align-items:center; justify-content:center;
+      overflow:hidden;
+      font-family: "Inter", system-ui, sans-serif;
+    }
+
+    /* Main glass card (two-panel) */
+    .auth-container{
+      display:flex;
+      background: var(--glass);
+      border:1px solid var(--border);
+      backdrop-filter: blur(var(--blur));
+      -webkit-backdrop-filter: blur(var(--blur));
+      border-radius:24px;
+      box-shadow: var(--shadow);
+      width: 900px; max-width:95%;
+      min-height: 560px;               /* 🔒 same height in both modes */
+      overflow:hidden;
+      animation: fadeInUp .5s ease both;
+    }
+
+    .auth-left{
+      flex:1;
+      padding:60px 70px;
+      display:flex; flex-direction:column; justify-content:center;
+      background: rgba(255,255,255,.25);
+      position:relative;
+    }
+
+    /* keeps visual height steady while toggling */
+    .form-wrapper{
+      min-height: 340px;               /* 🔒 equal visual height */
+      display:flex; flex-direction:column; justify-content:center;
+    }
+
+    .auth-left h2{
+      margin:0 0 30px; font-size:26px; font-weight:700; color:var(--ink);
+    }
+
+    form{ display:flex; flex-direction:column; gap:16px; width:100%; }
+
+    /* First/Last name row */
+    .name-fields{ display:flex; gap:14px; }
+    .name-fields input{ flex:1; min-width:0; }
+
+    input[type="text"], input[type="email"], input[type="password"]{
+      width:100%;
+      padding:14px 18px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.4);
+      background: rgba(255,255,255,.3);
+      font-size:15px; color:var(--ink);
+      outline:none; transition:.2s;
+      box-shadow:0 3px 8px rgba(0,0,0,.05);
+    }
+    input::placeholder{ color: rgba(0,0,0,.5) }
+    input:focus{ background: rgba(255,255,255,.5); border-color: var(--primary) }
+
+    .checkbox{
+      display:flex; align-items:center; gap:8px;
+      font-size:13px; color:var(--ink); margin-top:4px;
+    }
+    .checkbox input{ width:16px; height:16px; cursor:pointer; }
+
+    #auth-btn{
+      padding:12px; border:none; border-radius:12px; color:#fff;
+      font-weight:600; font-size:15px; cursor:pointer;
+      background: linear-gradient(135deg,#6f7dff,#40b0ff);
+      box-shadow: 0 8px 24px rgba(90,90,200,.35);
+      transition: all .2s ease;
+    }
+    #auth-btn:hover{ transform: translateY(-2px); box-shadow: 0 10px 28px rgba(90,90,200,.45); }
+
+    #toggle-btn{
+      background:none; border:none; color:rgba(0,0,0,.65);
+      margin-top:20px; font-size:14px; cursor:pointer; align-self:center;
+      transition: color .2s ease;
+    }
+    #toggle-btn:hover{ color: var(--primary) }
+
+    .auth-right {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.15);
+    position: relative;
+    }
+
+    .auth-right::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10%;
+    bottom: 10%;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.35);
+    filter: blur(0.5px);
+    }
+
+    .auth-right img {
+    width: 120px;           /* slightly larger for better balance */
+    height: auto;
+    object-fit: contain;
+    border-radius: 0;       /* removes rounded box */
+    background: none;       /* removes background color */
+    box-shadow: none;       /* removes shadow “box” glow */
+    margin-bottom: 20px;
+    }
+
+    .auth-right h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    }
+
+    .auth-right p {
+    font-size: 15px;
+    opacity: 0.8;
+    margin: 0;
+    }
+
+
+    @keyframes fadeInUp{ from{opacity:0; transform: translateY(10px)} to{opacity:1; transform: none} }
+
+    @media (max-width:760px){
+      .auth-container{ flex-direction:column; width:92%; min-height:auto; }
+      .auth-left{ padding:40px 28px }
+      .auth-right::before{ display:none }
+      .name-fields{ flex-direction:column; gap:10px }
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-container">
+    <!-- LEFT: Login/Signup -->
+    <div class="auth-left">
+      <div class="form-wrapper">
+        <h2 id="form-title">Login</h2>
+
+        <!-- IMPORTANT: keep names/ids so your Flask routes still work -->
+        <form id="auth-form" method="POST" action="/login" novalidate>
+          <!-- Sign-up only fields -->
+          <div id="signup-extra" style="display:none;">
+            <div class="name-fields">
+              <input type="text" id="first-name" name="firstName" placeholder="First Name" />
+              <input type="text" id="last-name" name="lastName" placeholder="Last Name" />
+            </div>
+          </div>
+
+          <input type="email" id="email" name="email" placeholder="Email" required />
+          <input type="password" id="password" name="password" placeholder="Password" required />
+
+          <input type="password" id="confirm-password" name="confirmPassword" placeholder="Confirm Password" style="display:none;" />
+
+          <div class="checkbox" id="terms-box" style="display:none;">
+            <input type="checkbox" id="terms" name="acceptTerms" />
+            <label for="terms">I accept the terms and conditions</label>
+          </div>
+
+          <button type="submit" id="auth-btn">Login</button>
+        </form>
+
+        <button id="toggle-btn">Don’t have an account? Sign up</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: Branding -->
+    <div class="auth-right">
+      <img src="{{ url_for('static', filename='assets/Logo.png') }}" alt="LawyerAI Logo"
+           onerror="this.style.background='#d7e6ff';this.src='';">
+      <h1>LawyerAI</h1>
+      <p>Your AI-powered legal assistant</p>
+    </div>
+  </div>
+
+  <script>
+    const formTitle   = document.getElementById('form-title');
+    const authForm    = document.getElementById('auth-form');
+    const authBtn     = document.getElementById('auth-btn');
+    const toggleBtn   = document.getElementById('toggle-btn');
+
+    const signupExtra   = document.getElementById('signup-extra');
+    const confirmPassEl = document.getElementById('confirm-password');
+    const termsBox      = document.getElementById('terms-box');
+
+    const emailEl    = document.getElementById('email');
+    const passwordEl = document.getElementById('password');
+    const termsEl    = document.getElementById('terms');
+
+    let isLogin = true;
+
+    // Toggle Login ⇄ Sign Up (restores all behaviors)
+    toggleBtn.addEventListener('click', () => {
+      isLogin = !isLogin;
+
+      formTitle.textContent = isLogin ? 'Login' : 'Sign Up';
+      authBtn.textContent   = isLogin ? 'Login' : 'Register';
+      authForm.action       = isLogin ? '/login' : '/signup';
+
+      signupExtra.style.display  = isLogin ? 'none' : 'block';
+      confirmPassEl.style.display= isLogin ? 'none' : 'block';
+      termsBox.style.display     = isLogin ? 'none' : 'flex';
+
+      toggleBtn.textContent = isLogin
+        ? "Don’t have an account? Sign up"
+        : "Already have an account? Login";
+    });
+
+    // Client-side guards for signup (keeps your old UX)
+    authForm.addEventListener('submit', (e) => {
+      if (!isLogin) {
+        const pass = passwordEl.value.trim();
+        const confirm = confirmPassEl.value.trim();
+
+        if (pass.length < 6) {
+          e.preventDefault();
+          alert('Password must be at least 6 characters.');
+          return;
+        }
+        if (pass !== confirm) {
+          e.preventDefault();
+          alert('Passwords do not match.');
+          return;
+        }
+        if (!termsEl.checked) {
+          e.preventDefault();
+          alert('Please accept the terms and conditions.');
+          return;
+        }
+      }
+      // For login, let the form post to /login (server handles redirect to /index)
+    });
+  </script>
+</body>
+</html>

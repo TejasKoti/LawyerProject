@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LawyerAI</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/Logo.png') }}">
+
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: radial-gradient(circle at top left, #38146b, #120527 80%);
+    }
+    .glass {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .glow {
+      box-shadow: 0 0 25px rgba(138,77,255,0.5);
+    }
+    .animate-float {
+      animation: float 4s ease-in-out infinite alternate;
+    }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-20px); }
+    }
+  </style>
+</head>
+
+<body class="text-white font-[Inter] overflow-x-hidden scroll-smooth">
+
+ <!-- Header -->
+<header class="absolute top-0 left-0 w-full flex justify-between items-center px-10 md:px-24 py-6 z-20 bg-transparent">
+  <div class="flex items-center gap-3">
+    <img src="static/assets/Logo.png" alt="LawyerAI Logo" class="h-10 w-10 rounded-lg">
+    <h1 class="text-2xl font-bold">LawyerAI</h1>
+  </div>
+
+  <nav class="hidden md:flex gap-4">
+    <a href="https://linkedin.com/in/tejaskoti" target="_blank"
+       class="px-5 py-2 rounded-full border border-white/30 text-white text-sm font-medium hover:bg-white/10 transition">
+       About
+    </a>
+    <a href="#features"
+       class="px-5 py-2 rounded-full border border-white/30 text-white text-sm font-medium hover:bg-white/10 transition">
+       Features
+    </a>
+    <a href="mailto:tejaskoti@gmail.com"
+       class="px-5 py-2 rounded-full border border-white/30 text-white text-sm font-medium hover:bg-white/10 transition">
+       Contact
+    </a>
+  </nav>
+</header>
+
+<!-- Hero Section -->
+<section class="relative flex flex-col md:flex-row items-center justify-between px-10 md:px-24 min-h-screen overflow-visible">
+  <!-- Glow that bleeds into header -->
+  <div class="absolute -top-40 right-0 w-[700px] h-[700px] rounded-full bg-gradient-to-tr from-[#8a4dff]/40 to-[#00eaff]/25 blur-[150px] opacity-70"></div>
+
+  <!-- Text (slightly down) -->
+  <div class="max-w-xl md:w-1/2 relative z-10 mt-16 md:mt-24 md:ml-8">
+    <h1 class="text-7xl md:text-8xl font-extrabold leading-tight mb-8">
+      Your Legal<br><span class="text-[#8a4dff]">Assistant, Reinvented</span>
+    </h1>
+    <p class="text-gray-300 text-xl md:text-2xl mb-10 leading-relaxed">
+      LawyerAI helps you find expert legal advice instantly. Get personalized recommendations, simplify case research, and stay empowered with AI-driven legal insights.
+    </p>
+    <div class="flex gap-4">
+      <button onclick="window.location.href='/login'"
+        class="bg-gradient-to-r from-[#8a4dff] to-[#00eaff] px-10 py-5 rounded-full font-semibold text-white shadow-lg text-xl hover:scale-105 transition-transform">
+        Get Started
+      </button>
+      <button onclick="window.open('https://github.com/TejasKoti/LawyerProject','_blank')"
+        class="px-10 py-5 rounded-full border border-white/30 text-white text-xl hover:bg-white/10 transition">
+        Learn More
+      </button>
+    </div>
+  </div>
+
+  <!-- ChatBot GIF (further LEFT + down) -->
+  <div class="flex justify-center md:justify-end w-full md:w-1/2 relative z-10 md:mt-40">
+    <img
+      src="static/assets/ChatBot.gif"
+      alt="ChatBot"
+      class="w-[580px] md:w-[800px] lg:w-[900px] drop-shadow-2xl md:-translate-x-24 lg:-translate-x-32"
+    />
+  </div>
+</section>
+
+  <!-- Section 2 -->
+  <section class="flex flex-col md:flex-row items-center justify-between px-10 md:px-24 py-24 bg-[#1b0935]">
+    <div class="md:w-1/2 mb-10 md:mb-0">
+      <img src="static/assets/Tech.gif" alt="Aura Animation" class="rounded-2xl shadow-2xl">
+    </div>
+    <div class="md:w-1/2 md:pl-12">
+      <h2 class="text-5xl font-bold mb-6">AI-Powered Legal Assistance</h2>
+      <p class="text-gray-300 text-lg mb-8">
+        Explore the cutting-edge AI tools designed to streamline legal research, document drafting, and client interactions. With LawyerAI, you’re equipped with insights and automation that save hours of tedious work.
+      </p>
+      <button onclick="window.open('https://github.com/TejasKoti/LawyerProject','_blank')"
+        class="bg-gradient-to-r from-[#8a4dff] to-[#00eaff] px-8 py-4 rounded-full font-semibold text-white hover:scale-105 transition-transform text-lg">
+        Learn More
+      </button>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="px-10 md:px-24 py-24 bg-[#120527]">
+    <h2 class="text-5xl font-bold text-center mb-16">What Our Users Say</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+      <div class="glass p-8 rounded-2xl text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-20 h-20 mx-auto mb-6 text-[#8a4dff]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.121 17.804A13.937 13.937 0 0112 15c2.507 0 4.847.665 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        <p class="text-gray-300 mb-6 text-lg">“LawyerAI simplified my legal research — I found case references in seconds!”</p>
+        <h3 class="font-semibold text-white text-xl">Default User</h3>
+      </div>
+      <div class="glass p-8 rounded-2xl text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-20 h-20 mx-auto mb-6 text-[#8a4dff]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.121 17.804A13.937 13.937 0 0112 15c2.507 0 4.847.665 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        <p class="text-gray-300 mb-6 text-lg">“The chatbot feature guided me through filing steps without confusion.”</p>
+        <h3 class="font-semibold text-white text-xl">Default User</h3>
+      </div>
+      <div class="glass p-8 rounded-2xl text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-20 h-20 mx-auto mb-6 text-[#8a4dff]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.121 17.804A13.937 13.937 0 0112 15c2.507 0 4.847.665 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        <p class="text-gray-300 mb-6 text-lg">“Incredible recommendation engine — found the right lawyer for my case.”</p>
+        <h3 class="font-semibold text-white text-xl">Default User</h3>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="px-10 md:px-24 py-24 bg-[#1b0935]">
+    <h2 class="text-5xl font-bold text-center mb-16">Key Features</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+      <div class="glass glow p-10 rounded-2xl text-center hover:scale-105 transition-transform">
+        <i class="ri-robot-line text-6xl text-[#8a4dff] mb-6"></i>
+        <h3 class="font-semibold text-2xl mb-3">Chatbot</h3>
+        <p class="text-gray-300 text-lg">Ask legal questions and receive instant, reliable answers powered by AI.</p>
+      </div>
+      <div class="glass glow p-10 rounded-2xl text-center hover:scale-105 transition-transform">
+        <i class="ri-user-search-line text-6xl text-[#00eaff] mb-6"></i>
+        <h3 class="font-semibold text-2xl mb-3">Lawyer Recommendation</h3>
+        <p class="text-gray-300 text-lg">Find specialized lawyers matched perfectly to your case type.</p>
+      </div>
+      <div class="glass glow p-10 rounded-2xl text-center hover:scale-105 transition-transform">
+        <i class="ri-book-3-line text-6xl text-[#ff4df2] mb-6"></i>
+        <h3 class="font-semibold text-2xl mb-3">Law Recommendation</h3>
+        <p class="text-gray-300 text-lg">Quickly identify relevant laws and precedents tailored to your needs.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="relative py-28 bg-gradient-to-b from-[#21093d] to-[#0d0221] text-center overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(138,77,255,0.2),transparent_70%)]"></div>
+    <div class="relative z-10 max-w-xl mx-auto glass p-12 rounded-3xl">
+      <h2 class="text-4xl font-bold mb-6">Get Early Access</h2>
+      <p class="text-gray-300 text-lg mb-10">Join the waitlist to be among the first to experience AI-powered legal intelligence.</p>
+      <form class="flex flex-col gap-5">
+        <input type="email" placeholder="Your email" class="px-5 py-4 rounded-full bg-white/10 text-white focus:outline-none border border-white/20 text-lg">
+        <textarea placeholder="Your message..." rows="3" class="px-5 py-4 rounded-2xl bg-white/10 text-white focus:outline-none border border-white/20 text-lg"></textarea>
+        <button class="bg-gradient-to-r from-[#8a4dff] to-[#00eaff] px-8 py-4 rounded-full font-semibold text-white hover:scale-105 transition-transform text-lg">
+          Join Now
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="text-center py-8 text-gray-400 text-sm">
+    © 2025 LawyerAI. All rights reserved.
+  </footer>
+
+</body>
+</html>

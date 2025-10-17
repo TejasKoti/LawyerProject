@@ -1,0 +1,653 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+:root {
+  --bg1: #b8a7ff;
+  --bg2: #79d1ff;
+  --bg3: #b6ffdb;
+  --ink: #0b1020;
+  --ink-dim: rgba(11, 16, 32, .65);
+  --glass: rgba(255, 255, 255, .16);
+  --glass-2: rgba(255, 255, 255, .22);
+  --border: rgba(255, 255, 255, .40);
+  --shadow: 0 10px 40px rgba(17, 23, 41, 0.25);
+  --radius-xl: 22px;
+  --radius: 14px;
+  --blur: 20px;
+}
+
+/* global smoother animation */
+* {
+  transition-duration: 0.15s !important;
+  animation-duration: 0.15s !important;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(1200px 800px at 10% 10%, var(--bg1), transparent 60%),
+    radial-gradient(1200px 800px at 90% 20%, var(--bg2), transparent 60%),
+    radial-gradient(1200px 800px at 50% 100%, var(--bg3), transparent 60%),
+    linear-gradient(120deg, #e8e7ff, #e7fbff);
+  overflow: hidden;
+}
+
+.app {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  padding: 22px;
+  gap: 22px;
+}
+
+/* transparent scrollbars */
+.content, .timeline {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(110, 120, 160, .45) transparent;
+}
+.content::-webkit-scrollbar, .timeline::-webkit-scrollbar { width: 8px }
+.content::-webkit-scrollbar-track, .timeline::-webkit-scrollbar-track { background: transparent }
+.content::-webkit-scrollbar-thumb, .timeline::-webkit-scrollbar-thumb {
+  background: rgba(110,120,160,.45); border-radius: 8px
+}
+.content::-webkit-scrollbar-thumb:hover, .timeline::-webkit-scrollbar-thumb:hover {
+  background: rgba(110,120,160,.65)
+}
+
+/* sidebar */
+.sidebar {
+  width: 280px; min-width: 260px;
+  height: 100%;
+  display: flex; flex-direction: column;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border-radius: calc(var(--radius-xl) + 4px);
+  box-shadow: var(--shadow);
+  padding: 20px 16px;
+  will-change: transform, opacity;
+}
+
+.brand {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; margin-bottom: 14px;
+}
+.brand img {
+  width: 40px; height: 40px; border-radius: 12px;
+  object-fit: cover; box-shadow: 0 6px 16px rgba(0,0,0,.15);
+}
+.brand .title { font-weight: 700; font-size: 18px; }
+
+.nav { display: flex; flex-direction: column; gap: 6px; margin: 6px 0 14px; }
+.nav h6 {
+  margin: 14px 12px 6px; font-size: 12px; font-weight: 600;
+  color: var(--ink-dim); text-transform: uppercase; letter-spacing: .8px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav h6 .circle {
+  height: 28px; width: 28px; border-radius: 50%;
+  display: grid; place-items: center;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.35);
+  cursor: pointer;
+}
+.item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 12px; border-radius: 12px;
+  color: var(--ink); text-decoration: none;
+  cursor: pointer; transition: background .2s;
+}
+.item:hover { background: var(--glass-2); }
+.item.active { background: var(--glass-2); outline: 1px solid var(--border); }
+
+/* ================= LIBRARY CHATS ================= */
+.library-list .row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-radius: 10px;
+  gap: 8px;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+  width: 100%;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.library-list .row:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.library-list .row .left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.library-list .row .left span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.library-list .row .right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.library-list .row .right button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* ================= FOLDERS ================= */
+.folders {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.folders .folder {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  gap: 8px;
+  border-radius: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.folders .folder:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* Left side (icon + name) */
+.folders .folder .left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* Right side (count, edit, dropdown) */
+.folders .folder .right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.folders .folder .right button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Nested chat list under folder */
+.folders .folder-content {
+  display: none;
+  flex-direction: column;
+  padding-left: 16px;
+  margin-top: 4px;
+  gap: 4px;
+}
+
+.folders .folder.open + .folder-content {
+  display: flex;
+}
+
+/* inline rename */
+.inline-edit {
+  width: 100%; border: none; outline: none; background: transparent;
+  padding: 6px 8px; border-radius: 8px; font: inherit; color: inherit;
+}
+.inline-edit:focus { background: rgba(255,255,255,.25); }
+
+/* folders dropdown */
+.chev {
+  height: 24px; width: 24px; border-radius: 8px;
+  display: grid; place-items: center;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.35);
+  cursor: pointer;
+}
+.subchats {
+  margin: 4px 0 8px 28px; display: none;
+  flex-direction: column; gap: 4px;
+}
+.subchats .sub {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 8px; border-radius: 8px; cursor: pointer;
+}
+.subchats .sub:hover { background: rgba(255,255,255,.18); }
+
+/* profile + popup */
+.profile-wrap { position: relative; margin-top: auto; }
+.profile {
+  width: 100%; background: rgba(255,255,255,0.22);
+  border: 1px solid var(--border); border-radius: 16px;
+  padding: 10px 14px; display: flex; align-items: center; gap: 10px;
+  cursor: pointer; transition: background 0.2s ease, transform 0.1s ease;
+}
+.profile:hover { background: rgba(255,255,255,0.3); transform: translateY(-1px); }
+.profile .avatar {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: #ffb27a; display: flex; align-items: center; justify-content: center;
+}
+.profile .avatar i { font-size: 20px; color: white; }
+.profile .meta { flex: 1; text-align: left; }
+.profile .meta .name { font-weight: 600; font-size: 14px; }
+.profile .meta .plan { font-size: 12px; color: var(--ink-dim); }
+.more-icon { font-size: 20px; opacity: .75; transition: opacity .2s ease; }
+.more-icon:hover { opacity: 1; }
+
+.user-menu {
+  position: absolute; bottom: 60px; right: 8px;
+  background: #fff; border: 1px solid #e6e7ee; border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0,0,0,.15);
+  display: none; flex-direction: column; z-index: 50;
+  animation: fadeIn 0.15s ease; overflow: hidden;
+}
+.user-menu .menu-item {
+  padding: 10px 14px; display: flex; align-items: center; gap: 8px;
+  font-size: 14px; cursor: pointer; color: #1d2333;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.user-menu .menu-item:hover { background: #ff4d4f; color: white; }
+.user-menu .menu-item i { font-size: 16px; }
+
+@keyframes fadeIn { from {opacity:0;transform:translateY(4px);} to {opacity:1;transform:translateY(0);} }
+
+/* main */
+.main { flex: 1; height: 100%; display: flex; flex-direction: column; }
+.surface {
+  background: var(--glass); border: 1px solid var(--border);
+  backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+  border-radius: calc(var(--radius-xl) + 4px); box-shadow: var(--shadow);
+  height: 100%; display: flex; flex-direction: column;
+  overflow: hidden; position: relative;
+  will-change: transform, opacity;
+}
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 18px 0 18px;
+}
+.left-head { display: flex; align-items: center; gap: 10px; }
+
+/* === new expandable search === */
+.search-toggle {
+  height: 36px;
+  width: 36px;
+  border: none;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: all 0.1s ease;
+}
+.search-toggle:hover {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.search-expanded {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 18px;
+  padding: 4px 8px;
+  margin-left: 6px;
+  width: 0;
+  opacity: 0;
+  /* ✅ critical fix: allow dropdown to overflow */
+  overflow: visible;
+  transition: width 0.1s ease, opacity 0.1s ease;
+  position: relative;
+  z-index: 60;
+}
+.search-expanded.active {
+  width: 450px;
+  opacity: 1;
+}
+
+.search-expanded input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: #1d2333;
+}
+
+.counter {
+  font-size: 13px;
+  color: #444;
+  min-width: 45px;
+  text-align: right;
+}
+
+/* === custom search filter dropdown (final improved version) === */
+.search-filter {
+  position: relative;
+  width: 100px;
+  font-size: 14px;
+  color: #1d2333;
+  user-select: none;
+  z-index: 80;
+  text-align: center;
+}
+
+.search-filter .selected {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 8px 14px;      /* ⬆️ more padding */
+  min-width: 100px;       /* ⬆️ make button wider */
+  height: 36px;           /* ⬆️ make it taller */
+  line-height: 20px;      /* keeps text vertically centered */
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;          /* ✅ ensures arrow and text align nicely */
+  align-items: center;
+  justify-content: center;
+  gap: 6px;               /* space between text and arrow */
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.search-filter .selected:hover {
+  background: #f0f3ff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.search-filter .options {
+  position: absolute;
+  top: calc(100% + 4px); /* spawn just below the button */
+  left: 50%;
+  transform: translate(-50%, -5px); /* small lift for animation */
+  min-width: 140px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 9999;
+  overflow: hidden;
+  padding: 4px 0;
+}
+
+/* Smooth fade + slide-in effect */
+.search-filter.open .options {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+
+
+.search-filter .options li {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+  border-radius: 6px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.search-filter .options li:hover,
+.search-filter .options li.active {
+  background: #5f7dff;
+  color: #fff;
+}
+
+/* smooth fade-down animation */
+@keyframes dropdownFade {
+  from { opacity: 0; transform: translate(-50%, -5px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+
+
+/* chat */
+.content { padding: 12px 18px 0 18px; overflow: auto; flex: 1; will-change: scroll-position; }
+.timeline { display: flex; flex-direction: column; gap: 12px; padding: 10px 0; contain: content; }
+.msg {
+  max-width: 70%; padding: 12px 16px; border-radius: 16px;
+  line-height: 1.35; will-change: transform;
+}
+.msg.bot {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
+  font-size: 1rem;
+  white-space: normal;
+  text-align: left;
+  padding: 0.8rem 1rem;
+  border-radius: 1rem;
+  color: #111;
+  max-width: 85%;
+  word-wrap: break-word;
+}
+.msg.bot h1, .msg.bot h2, .msg.bot h3 {
+  margin: 0.4rem 0 0.3rem;
+  font-weight: 600;
+  color: #222;
+}
+
+.msg.bot .list-item {
+  margin-left: 1rem;
+  margin-bottom: 0.2rem;
+}
+
+.msg.bot b {
+  font-weight: 600;
+  color: #000;
+}
+
+.msg.bot {
+  line-height: 1.6;
+  white-space: normal;
+  text-align: left;
+}
+.msg.user {
+  align-self: flex-end; color: #fff;
+  background: linear-gradient(135deg,#7e75ff,#6a5acd,#4aa4ff);
+  box-shadow: 0 8px 24px rgba(90,90,200,.35);
+}
+mark.hl { background: #fff59d; padding: 0 3px; border-radius: 4px; }
+
+.composer-wrap { padding: 16px 18px 18px; }
+.composer {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(255,255,255,.85);
+  border: 1px solid rgba(255,255,255,.95);
+  border-radius: 20px;
+  padding: 8px 10px 8px 14px;
+  box-shadow: var(--shadow);
+}
+.composer input {
+  flex: 1; border: none; outline: none;
+  background: transparent; font-size: 15px; color: #1d2333;
+}
+.icon-btn {
+  height: 36px; width: 36px; display: grid; place-items: center;
+  border: none; background: transparent; border-radius: 10px; cursor: pointer;
+}
+.icon-btn:hover { background: rgba(0,0,0,.06); }
+.send {
+  height: 38px; width: 38px; border-radius: 50%;
+  border: none; cursor: pointer;
+  background: linear-gradient(135deg,#6f7dff,#40b0ff);
+  color: #fff; box-shadow: 0 10px 24px rgba(64,176,255,.35);
+}
+.send:hover { transform: translateY(-1px); }
+
+/* modals */
+.backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.35);
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  display: none; align-items: center; justify-content: center;
+  z-index: 20;
+}
+.modal {
+  background: #fff; border-radius: 14px;
+  max-width: 420px; width: 92%;
+  color: #1d2333; padding: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+}
+.modal h3 { margin: 0 0 10px; }
+.modal .list {
+  max-height: 260px; overflow: auto;
+  border: 1px solid #e6e7ee; border-radius: 8px; padding: 8px;
+}
+.modal .row { display: flex; align-items: center; gap: 8px; padding: 6px; border-radius: 6px; }
+.modal .row:hover { background: #f5f6fb; }
+.modal .actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+.modal input[type="text"] {
+  width: 100%; border: 1px solid #e1e4ef; border-radius: 10px;
+  padding: 10px 12px; font-size: 14px;
+}
+.btn { border: none; border-radius: 10px; padding: 8px 12px; cursor: pointer; }
+.btn.primary { background: #5f7dff; color: #fff; }
+.btn.ghost { background: #eef1ff; }
+
+/* menu */
+.menu {
+  position: absolute; top: 52px; right: 18px;
+  background: #fff; color: #1d2333;
+  border: 1px solid #e6e7ee; border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.2);
+  display: none; z-index: 15; min-width: 220px; overflow: hidden;
+}
+.menu .mi {
+  display: flex; gap: 10px; align-items: center;
+  padding: 10px 12px; cursor: pointer; border-radius: 12px;
+}
+.menu .mi:hover { background: #f6f7fc; border-radius: 12px; }
+
+@media (max-width:1100px) {
+  .sidebar { display: none; }
+  .app { padding: 14px; }
+}
+
+/* --- fix dropdown clipping in header --- */
+.header {
+  overflow: visible !important;   /* ✅ allow dropdown to escape header bounds */
+  position: relative;
+  z-index: 100;
+}
+
+/* also make sure the container layers above aren’t clipping it */
+.surface {
+  overflow: visible !important;
+  position: relative;
+  z-index: 90;
+}
+
+/* === three-dots dropdown menu === */
+.menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 20;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  display: none;
+  flex-direction: column;
+  z-index: 6000; /* ⬆️ boosted above .surface blur */
+  min-width: 200px;
+  overflow: hidden;
+}
+
+.menu.open {
+  display: flex;
+  animation: dropdownFade 0.15s ease;
+}
+
+
+.menu .mi {
+  padding: 20px 20px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+
+.menu .mi:hover {
+  background: #eef1ff;
+}
+@keyframes dropdownFade {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.menu.open {
+  display: flex;
+  animation: dropdownFade 0.15s ease;
+}
+
+/* === Fix stacking context for menus === */
+
+/* Ensure main chat container doesn't create a higher stacking context */
+.main,
+.surface,
+.content,
+.timeline {
+  z-index: auto !important;
+  position: static !important;
+}
+
+/* Force all dropdowns and modals to render above everything */
+.menu,
+#userMenu,
+#folderModal,
+#renameModal {
+  position: fixed !important;
+  z-index: 999999 !important;
+}
+
+/* === Fix glow clipping near scrollbar === */
+.content {
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 28px;     /* adds space so glow isn't cut off */
+  box-sizing: border-box;
+  scrollbar-gutter: stable; /* keeps layout steady even when scrollbar appears */
+}
+
+.timeline {
+  contain: none !important; /* ⬅️ critical: remove paint containment that clips shadows */
+  overflow: visible;        /* lets shadows and glows extend beyond */
+}
+
+.msg.user {
+  margin-right: 6px;        /* optional: adds extra breathing room near scrollbar */
+}
+
