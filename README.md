@@ -1,4 +1,4 @@
-# ⚖️ LawyerAI — Chatbot & Recommendation
+# ⚖️ LawyerAI : Chatbot & Recommendation
 
 An AI-powered web application that combines a **fine-tuned Llama-2 legal chatbot** with a **lawyer recommendation engine**.  
 The system allows users to:  
@@ -6,6 +6,22 @@ The system allows users to:
 - Search and filter lawyers by domain, experience, and budget.  
 - Log in/sign up securely using Firebase authentication.  
 - Run in **two modes**: lightweight (Colab-hosted model) or full local GPU deployment.
+
+---
+
+## 🖼 Screenshots
+
+- **Landing / Main**  
+  ![Main](WebsiteFinal/New/PreviewImages/A-MainPage.gif)
+
+- **Login**  
+  ![Login](WebsiteFinal/New/PreviewImages/B-Login.png)
+
+- **Chatbot**  
+  ![Chat](WebsiteFinal/New/PreviewImages/C-ChatBot.png)
+
+- **Recommendations**  
+  ![Recommendations](WebsiteFinal/New/PreviewImages/D-Recommendation.png)
 
 ---
 
@@ -154,22 +170,6 @@ Open http://127.0.0.1:5000 — you’ll see the **landing page** → Login and E
 
 ---
 
-## 🖼 Screenshots
-
-- **Landing / Main**  
-  ![Main](WebsiteFinal/New/PreviewImages/A-MainPage.gif)
-
-- **Login**  
-  ![Login](WebsiteFinal/New/PreviewImages/B-Login.png)
-
-- **Chatbot**  
-  ![Chat](WebsiteFinal/New/PreviewImages/C-ChatBot.png)
-
-- **Recommendations**  
-  ![Recommendations](WebsiteFinal/New/PreviewImages/D-Recommendation.png)
-
----
-
 ## ⚙️ Configuration & Customization
 - **Colab model**: Replace `TejasKoti/Llama-2-7b-lawyer-chat` with your model in the notebook. Generation params (temperature, top_p, penalties, min/max tokens) are already tuned for long, clean answers and headings within my Colab Notebook.
 - **Recommendation columns**: CSV must contain `Name`, `Domain`, `Years of active experience`, `Price`, `Client satisfaction (out of 10)`.
@@ -197,4 +197,4 @@ Open http://127.0.0.1:5000 — you’ll see the **landing page** → Login and E
 ## ⚠️ Notes
 
 - Running Llama-2 locally requires **large VRAM (24GB+)**.  
-- For lightweight devices, use **ColabHost + ngrok**.  
+- For lightweight devices, use **ColabHost + ngrok**.
